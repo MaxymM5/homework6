@@ -1,10 +1,12 @@
+import styles from "./TodoForm.module.css";
+import { useState } from "react";
 import type { FormEvent } from "react";
-import type { SortOrder } from "../types/types";
+import type { SortOrder, Todo } from "../types";
 
 interface TodoFormProps {
   inputValue: string;
   onInputChange: (value: string) => void;
-  onAdd: (text: string) => void;
+  onAdd: (text: string, priority: Todo["priority"], date: string) => void;
   onToggleSort: () => void;
   sortOrder: SortOrder;
 }
@@ -16,9 +18,17 @@ const TodoForm = ({
   onToggleSort,
   sortOrder,
 }: TodoFormProps) => {
+  const [priority, setPriority] = useState<Todo["priority"]>("normal");
+  const [date, setDate] = useState("");
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onAdd(inputValue);
+
+    if (!inputValue.trim()) return;
+
+    onAdd(inputValue, priority, date);
+    setDate("");
+    setPriority("normal");
   };
 
   const sortLabel =
@@ -28,31 +38,54 @@ const TodoForm = ({
       ? "Сортування: Я-А"
       : "Сортувати";
 
-  return (
-    <form className="controls" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        id="todo-input"
-        placeholder="Що потрібно зробити?"
-        value={inputValue}
-        onChange={(e) => onInputChange(e.target.value)}
-        autoComplete="off"
-      />
+  
+return (
+  <form className={styles.form} onSubmit={handleSubmit}>
+    <input
+      className={styles.input}
+      type="text"
+      id="todo-input"
+      placeholder="Що потрібно зробити?"
+      value={inputValue}
+      onChange={(e) => onInputChange(e.target.value)}
+      autoComplete="off"
+    />
 
-      <button type="submit" id="add-button" title="Додати задачу">
-        <span className="btn-icon">＋</span> Додати
+    <select
+      className={styles.select}
+      value={priority}
+      onChange={(e) =>
+        setPriority(e.target.value as Todo["priority"])
+      }
+    >
+      <option value="low">Низький пріоритет</option>
+      <option value="normal">Звичайний пріоритет</option>
+      <option value="high">Високий пріоритет</option>
+    </select>
+
+    <input
+      className={styles.input}
+      type="datetime-local"
+      value={date}
+      onChange={(e) => setDate(e.target.value)}
+    />
+
+    <div className={styles.buttons}>
+      <button type="submit" id="add-button" className={styles.addButton}>
+        Додати
       </button>
 
       <button
         type="button"
         id="sort-button"
+        className={styles.sortButton}
         onClick={onToggleSort}
-        title="Сортувати за алфавітом"
       >
-        <span className="btn-icon">⇅</span> {sortLabel}
+        {sortLabel}
       </button>
-    </form>
-  );
+    </div>
+  </form>
+);
 };
 
 export default TodoForm;

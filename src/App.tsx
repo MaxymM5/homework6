@@ -1,12 +1,22 @@
+import styles from "./App.module.css";
+import Header from "./components/Header";
+import Counter from "./components/Counter";
 import { useState, useEffect } from "react";
 import TodoForm from "./components/TodoForm";
 import TodoList from "./components/TodoList";
-import type { Todo, SortOrder } from "./types/types";
+import type { Todo, SortOrder } from "./types";
 
 const App = () => {
   const [todos, setTodos] = useState<Todo[]>(() => {
     const saved = localStorage.getItem("todos");
-    return saved ? JSON.parse(saved) : [];
+
+    if (!saved) return [];
+
+    return JSON.parse(saved).map((todo: Todo) => ({
+      ...todo,
+      priority: todo.priority ?? "normal",
+      date: todo.date ?? "",
+    }));
   });
 
   const [inputValue, setInputValue] = useState<string>("");
@@ -29,7 +39,11 @@ const App = () => {
     document.title = `Задач: ${totalCount} | Todo App`;
   }, [totalCount]);
 
-  const handleAddTodo = (text: string): void => {
+  const handleAddTodo = (
+    text: string,
+    priority: Todo["priority"],
+    date: string
+  ): void => {
     const trimmed = text.trim();
 
     if (!trimmed) return;
@@ -38,6 +52,8 @@ const App = () => {
       id: Date.now(),
       text: trimmed,
       completed: false,
+      priority,
+      date,
     };
 
     setTodos((prev) => [...prev, newTodo]);
@@ -65,13 +81,8 @@ const App = () => {
   };
 
   return (
-    <main className="todo-app">
-      <header className="app-header">
-        <h1>Todo List</h1>
-        <p className="subtitle">
-          Організуй свої щоденні справи та завдання
-        </p>
-      </header>
+    <main className={styles.app}>
+      <Header />
 
       <TodoForm
         inputValue={inputValue}
@@ -81,12 +92,10 @@ const App = () => {
         sortOrder={sortOrder}
       />
 
-      <div className="counter">
-        <span className="counter-label">Всього завдань:</span>
-        <span id="todo-count">
-          {totalCount} (виконано: {completedCount})
-        </span>
-      </div>
+      <Counter
+        totalCount={totalCount}
+        completedCount={completedCount}
+      />
 
       <TodoList
         todos={displayedTodos}

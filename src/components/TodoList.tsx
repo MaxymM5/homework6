@@ -1,6 +1,6 @@
-
-import type { Todo } from "../types/types";
+import type { Todo } from "../types";
 import TodoItem from "./TodoItem";
+import styles from "./TodoList.module.css";
 
 interface TodoListProps {
   todos: Todo[];
@@ -10,15 +10,19 @@ interface TodoListProps {
 
 const TodoList = ({ todos, onToggle, onDelete }: TodoListProps) => {
   return (
-    <div id="todo-list" className="todo-container">
-      {todos.map((todo) => (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-          onToggle={onToggle}
-          onDelete={onDelete}
-        />
-      ))}
+    <div id="todo-list" className={styles.list}>
+      {todos.length === 0 ? (
+        <p className={styles.empty}>Поки що завдань немає</p>
+      ) : (
+        todos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            onToggle={onToggle}
+            onDelete={onDelete}
+          />
+        ))
+      )}
     </div>
   );
 };

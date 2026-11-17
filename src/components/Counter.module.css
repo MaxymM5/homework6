@@ -1,0 +1,27 @@
+.counter {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.counterItem {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: #f8fafc;
+  border-radius: 10px;
+  color: #475569;
+}
+
+.counterItem strong {
+  font-size: 22px;
+  color: #2563eb;
+}
+
+@media (max-width: 450px) {
+  .counter {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,70 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 15px;
+  background: #ffffff;
+  color: #334155;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.addButton,
+.sortButton {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.addButton {
+  background: #2563eb;
+  color: white;
+}
+
+.addButton:hover {
+  background: #1d4ed8;
+}
+
+.sortButton {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.sortButton:hover {
+  background: #cbd5e1;
+}
+
+.addButton:active,
+.sortButton:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 450px) {
+  .buttons {
+    flex-direction: column;
+  }
+}
